@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AssemblyName>NPlugin</AssemblyName>
+    <RootNamespace>NPlugin</RootNamespace>
+    <RevitVersion>2026</RevitVersion>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <DefineConstants>$(DefineConstants);REVIT2026;REVIT2022_OR_GREATER;REVIT2023_OR_GREATER;REVIT2024_OR_GREATER;REVIT2025_OR_GREATER;REVIT2026_OR_GREATER</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\NPlugin.Revit.Shared\**\*.cs" />
+    <None Include="NPlugin.addin.template" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NPlugin.Core\NPlugin.Core.csproj" />
+    <ProjectReference Include="..\NPlugin.UI\NPlugin.UI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.104.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Ссылки на API установленного Revit; Copy Local = False (сборки предоставляет Revit). -->
+    <Reference Include="RevitAPI">
+      <HintPath>$(ProgramFiles)\Autodesk\Revit $(RevitVersion)\RevitAPI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="RevitAPIUI">
+      <HintPath>$(ProgramFiles)\Autodesk\Revit $(RevitVersion)\RevitAPIUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="GenerateAddin" AfterTargets="Build">
+    <Copy SourceFiles="NPlugin.addin.template" DestinationFiles="$(OutDir)NPlugin.addin" OverwriteReadOnlyFiles="true" />
+    <XmlPoke XmlInputPath="$(OutDir)NPlugin.addin" Query="/RevitAddIns/AddIn/Assembly" Value="$(TargetPath)" />
+  </Target>
+
+</Project>

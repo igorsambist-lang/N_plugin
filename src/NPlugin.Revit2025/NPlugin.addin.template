@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>N Plugin</Name>
+    <Assembly>__ASSEMBLY_PATH__</Assembly>
+    <AddInId>3f9c1e52-b7a4-4d2e-9a6c-1e8f3d5b7a20</AddInId>
+    <FullClassName>NPlugin.Application.NPluginApp</FullClassName>
+    <VendorId>NPLG</VendorId>
+    <VendorDescription>N Plugin</VendorDescription>
+  </AddIn>
+</RevitAddIns>

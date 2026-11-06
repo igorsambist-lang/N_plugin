@@ -1,0 +1,47 @@
+<Window x:Class="NPlugin.UI.Views.NavisworksWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="N Plugin — Вид Navisworks" Width="520" Height="460"
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResize">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <GroupBox Header="Шаблонный 3D-вид" Grid.Row="0" Margin="0,0,0,8">
+            <Grid Margin="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <ListView ItemsSource="{Binding Views}" SelectedItem="{Binding SelectedView}" DisplayMemberPath="Name" Grid.Row="0" />
+                <Button Grid.Row="1" Content="Обновить список" Command="{Binding RefreshCommand}" HorizontalAlignment="Left" Margin="0,6,0,0" Padding="8,3" />
+            </Grid>
+        </GroupBox>
+
+        <StackPanel Grid.Row="1" Margin="0,0,0,8">
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                <TextBlock Text="Имя нового вида:" VerticalAlignment="Center" Margin="0,0,6,0" />
+                <TextBox Text="{Binding NewName, UpdateSourceTrigger=PropertyChanged}" Width="220" />
+            </StackPanel>
+            <CheckBox Content="Скрыть категории аннотаций" IsChecked="{Binding HideAnnotations}" Margin="0,0,0,4" />
+            <CheckBox Content="Скрыть импортированные объекты (CAD)" IsChecked="{Binding HideImports}" Margin="0,0,0,4" />
+            <CheckBox Content="Детализация: Fine" IsChecked="{Binding FineDetail}" Margin="0,0,0,4" />
+            <CheckBox Content="Экспортировать NWC после создания" IsChecked="{Binding ExportNwc}" />
+            <StackPanel Orientation="Horizontal" Margin="20,4,0,0" IsEnabled="{Binding ExportNwc}">
+                <TextBlock Text="Папка NWC:" VerticalAlignment="Center" Margin="0,0,6,0" />
+                <TextBox Text="{Binding NwcFolder, UpdateSourceTrigger=PropertyChanged}" Width="240" Margin="0,0,6,0" />
+                <Button Content="..." Click="BrowseNwcClick" Width="30" />
+            </StackPanel>
+        </StackPanel>
+
+        <TextBlock Grid.Row="2" Text="{Binding Status}" TextWrapping="Wrap" Margin="0,0,0,8" />
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Создать" Command="{Binding CreateCommand}" Padding="16,4" FontWeight="Bold" IsDefault="True" />
+        </StackPanel>
+    </Grid>
+</Window>

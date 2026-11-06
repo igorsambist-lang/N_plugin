@@ -1,0 +1,56 @@
+<Window x:Class="NPlugin.UI.Views.ClashWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="N Plugin — Пересечения (Clash)" Width="760" Height="560"
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResize">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="0,0,0,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="220" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="220" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Категория A:" VerticalAlignment="Center" Margin="0,0,6,0" />
+            <ComboBox Grid.Column="1" ItemsSource="{Binding LeftCategories}" SelectedItem="{Binding LeftCategory}" Margin="0,0,12,0" />
+            <TextBlock Grid.Column="2" Text="Категория B:" VerticalAlignment="Center" Margin="0,0,6,0" />
+            <ComboBox Grid.Column="3" ItemsSource="{Binding RightCategories}" SelectedItem="{Binding RightCategory}" Margin="0,0,12,0" />
+            <Button Grid.Column="4" Content="Запустить" Command="{Binding RunCommand}" Padding="12,3" FontWeight="Bold" />
+        </Grid>
+
+        <ListView ItemsSource="{Binding Clashes}" SelectedItem="{Binding SelectedClash}" Grid.Row="1" Margin="0,0,0,8">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Элемент A" DisplayMemberBinding="{Binding AName}" Width="200" />
+                    <GridViewColumn Header="Система A" DisplayMemberBinding="{Binding ASystem}" Width="140" />
+                    <GridViewColumn Header="Элемент B" DisplayMemberBinding="{Binding BName}" Width="200" />
+                    <GridViewColumn Header="Система B" DisplayMemberBinding="{Binding BSystem}" Width="140" />
+                    <GridViewColumn Header="Уровень" DisplayMemberBinding="{Binding Level}" Width="*" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <Grid Grid.Row="2" Margin="0,0,0,8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <ProgressBar Value="{Binding Progress}" Height="8" Margin="0,0,0,4" />
+            <TextBlock Grid.Row="1" Text="{Binding Status}" TextWrapping="Wrap" />
+        </Grid>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Выбрать в модели" Command="{Binding SelectCommand}" Margin="0,0,6,0" Padding="10,3" />
+            <Button Content="3D-вид" Command="{Binding ShowViewCommand}" Margin="0,0,6,0" Padding="10,3" />
+            <Button Content="Отчёт Excel" Command="{Binding ExportExcelCommand}" Padding="10,3" />
+        </StackPanel>
+    </Grid>
+</Window>
