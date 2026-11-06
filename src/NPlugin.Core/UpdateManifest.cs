@@ -24,4 +24,15 @@ public class UpdatePackage
 
     public string Sha256 { get; set; }
     public long Size { get; set; }
+
+    /// <summary>SHA256 каждого файла внутри архива — проверка целостности после распаковки.</summary>
+    public List<UpdatePackageFile> Files { get; set; }
+}
+
+public class UpdatePackageFile
+{
+    /// <summary>Путь файла внутри ZIP (относительно корня архива).</summary>
+    public string Path { get; set; }
+
+    public string Sha256 { get; set; }
 }

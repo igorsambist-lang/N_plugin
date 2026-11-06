@@ -126,6 +126,7 @@ public class UpdateExecutor
                 if (Directory.Exists(stageDir))
                     Directory.Delete(stageDir, true);
                 ZipFile.ExtractToDirectory(zipPath, stageDir);
+                VerifyStagedFiles(package, stageDir);
                 staged[package.RevitVersion] = stageDir;
                 Log($"Пакет Revit {package.RevitVersion} готов.");
             }
@@ -190,6 +191,29 @@ public class UpdateExecutor
                 try { Directory.Delete(dir, true); }
                 catch { /* не критично */ }
             }
+        }
+    }
+
+    /// <summary>
+    /// Проверяет хэши распакованных файлов: распаковщик ZIP не гарантирует обнаружение
+    /// повреждений внутри архива (CRC отдельных записей может не проверяться).
+    /// Для манифестов старого формата (без списка файлов) проверка пропускается.
+    /// </summary>
+    private static void VerifyStagedFiles(UpdatePackage package, string stageDir)
+    {
+        if (package.Files == null || package.Files.Count == 0)
+            return;
+
+        foreach (var file in package.Files)
+        {
+            var stagedFile = Path.Combine(stageDir, file.Path);
+            if (!File.Exists(stagedFile))
+                throw new InvalidDataException($"В пакете Revit {package.RevitVersion} отсутствует файл {file.Path}");
+
+            var actualHash = ManifestClient.Sha256File(stagedFile);
+            if (!string.Equals(actualHash, file.Sha256, StringComparison.OrdinalIgnoreCase))
+                throw new InvalidDataException(
+                    $"SHA256 файла {file.Path} не совпал: ожидалось {file.Sha256}, получено {actualHash}");
         }
     }
 

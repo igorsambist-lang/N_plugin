@@ -33,12 +33,21 @@ foreach ($rev in 2022, 2023, 2024, 2025, 2026) {
         Where-Object { $_.Name -ne 'NPlugin.addin' -and $_.Extension -ne '.pdb' -and $_.Extension -ne '.deps.json' }
     Compress-Archive -Path $files.FullName -DestinationPath $zipPath -CompressionLevel Optimal
 
+    $fileHashes = @()
+    foreach ($file in $files) {
+        $fileHashes += [pscustomobject]@{
+            path   = $file.Name
+            sha256 = (Get-FileHash $file.FullName -Algorithm SHA256).Hash.ToLower()
+        }
+    }
+
     $sha = (Get-FileHash $zipPath -Algorithm SHA256).Hash.ToLower()
     $packages += [pscustomobject]@{
         revitVersion = "$rev"
         fileName     = $zipName
         sha256       = $sha
         size         = (Get-Item $zipPath).Length
+        files        = $fileHashes
     }
     Write-Host "Пакет Revit ${rev}: $zipName ($sha)"
 }
